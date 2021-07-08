@@ -20,7 +20,7 @@ const scopes = ['https://www.googleapis.com/auth/drive'];
 const auth = new google.auth.JWT(credentialsJSON.client_email, null, credentialsJSON.private_key, scopes);
 const drive = google.drive({ version: 'v3', auth });
 
-const driveLink = `https://drive.google.com/drive/folders/${folder}`
+const driveLink = `https://drive.google.com/drive/folders/${folderId}`
 
 async function main() {
   actions.setOutput(link, driveLink);
