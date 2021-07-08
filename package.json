@@ -4,13 +4,13 @@
   "description": "Github action to upload files or folders to Google Drive",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jodebu/upload-to-drive"
+    "url": "https://github.com/baymac/upload-to-drive"
   },
   "main": "index.js",
   "scripts": {
     "build": "ncc build index.js -C -m -o dist"
   },
-  "author": "Yayo Acosta",
+  "author": "Parichay Barpanda",
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.2.4",
@@ -18,6 +18,6 @@
     "googleapis": "^51.0.0"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.22.3"
+    "@vercel/ncc": "^0.28.6"
   }
 }
