@@ -5,16 +5,20 @@ inputs:
   credentials:
     description: 'Google Service Account credentials'
     required: true
-  folder:
+  folderId:
     description: 'Google Drive folder ID to upload the cv to'
     required: true
   target:
     description: 'Local path to the file/folder to upload'
     required: true
-  name:
-    description: 'Optional name for upload file (will default to cv.pdf if not supplied)'
+  filename:
+    description: 'Optional name for upload file (will default to upload.pdf if not supplied)'
     required: false
     default: null
+  overwrite:
+    description: 'Optionally overwrite if file with same name exists or create new'
+    required: false
+    default: false
 outputs:
   link:
     description: 'A link to the Drive folder'

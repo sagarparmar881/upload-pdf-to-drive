@@ -31,6 +31,7 @@ jobs:
         with:
           target: main.pdf
           credentials: ${{ secrets.SVC_ACC_BASE64 }}
-          folder: <YOUR_DRIVE_FOLDER_ID>
-          name: <ANY_CUSTOM_NAME_WITHOUT_EXTENSION> # optional
+          folderId: <YOUR_DRIVE_FOLDER_ID>
+          filename: <ANY_CUSTOM_NAME_WITHOUT_EXTENSION> # optional (defaults to upload.pdf)
+          overwrite: <OVERWRITE_FILE_OR_NOT> # optional (defaults to not overwrite)
 ```
