@@ -1,6 +1,7 @@
 const actions = require('@actions/core');
 const { google } = require('googleapis');
 const fs = require('fs');
+const getfilelist = require('google-drive-getfilelist');
 
 /** Google Service Account credentials  encoded in base64 */
 const credentials = actions.getInput('credentials', { required: true });
