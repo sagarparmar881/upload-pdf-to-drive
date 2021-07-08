@@ -1,5 +1,5 @@
-name: 'Upload to Google Drive'
-description: 'Uploads a file or a folder to Google Drive'
+name: 'Upload PDF to Google Drive'
+description: 'Uploads a PDF file to Google Drive'
 author: 'Parichay Barpanda'
 inputs: 
   credentials:
@@ -21,6 +21,3 @@ outputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
-branding:
-  icon: 'upload-cloud'  
-  color: 'orange'
