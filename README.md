@@ -26,7 +26,7 @@ jobs:
         with:
           root_file: main.tex
           compiler: pdflatex
-      - name: Upload README.md to Google Drive
+      - name: Upload PDF to Google Drive
         uses: baymac/upload-pdf-to-drive@main
         with:
           target: main.pdf
