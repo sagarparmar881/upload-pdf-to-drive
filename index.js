@@ -87,7 +87,7 @@ function uploadToDrive() {
     body: fs.createReadStream(target)
   };
 
-  if (overwrite) {
+  if (overwrite === 'true') {
     const existingFileId = fileIdIfExists()
     if (existingFileId) {
       update(existingFileId, fileMetadata, media)
