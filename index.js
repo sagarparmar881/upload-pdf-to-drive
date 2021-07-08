@@ -77,7 +77,6 @@ function update(fileId, fileMetadata, media) {
  * Uploads the file to Google Drive
  */
 function uploadToDrive() {
-  actions.info('Uploading file to Goole Drive...');
   var fileMetadata = {
     name: getFileName(),
     parents: [folderId]
@@ -86,15 +85,19 @@ function uploadToDrive() {
     mimeType: 'application/pdf',
     body: fs.createReadStream(target)
   };
-
   if (overwrite === 'true') {
+    actions.info('Checking if file exists...');
     const existingFileId = fileIdIfExists()
     if (existingFileId) {
+      actions.info(`File exists with ID: ${existingFileId}`);
+      actions.info("Updating file..")
       update(existingFileId, fileMetadata, media)
     } else {
+      actions.info("Creating new file..")
       create(fileMetadata, media)
     }
   } else {
+    actions.info("Creating new file..")
     create(fileMetadata, media)
   }
 
