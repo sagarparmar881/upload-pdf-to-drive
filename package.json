@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "google-drive-getfilelist": "^1.0.5",
     "googleapis": "^51.0.0"
   },
   "devDependencies": {

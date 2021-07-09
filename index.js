@@ -32,22 +32,37 @@ function getFileName() {
   return filename.length > 0 ? `${filename}.pdf` : 'upload.pdf'
 }
 
-function fileIdIfExists() {
-  getfilelist.GetFileList(
-    {
-      auth: auth,
-      fields: "files(name, id)",
-      id: folderId,
-    },
-    (err, res) => {
+function doList(pageToken) {
+  return new Promise((resolve, reject) => {
+    drive.files.list({
+      q: "mimeType='application/pdf'",
+      fields: 'nextPageToken, files(id,name,parents)',
+      spaces: 'drive',
+      pageToken: pageToken
+    }, function (err, res) {
       if (err) {
-        console.log(err);
-        return;
+        // Handle error
+        console.error(err);
+        reject(err)
+      } else {
+        const searchedFile = res.data.files.find(file => file.parents[0] === folderId && file.name === `${filename}.pdf`);
+        pageToken = res.nextPageToken;
+        resolve({ searchedFile, pageToken });
       }
-      const fileList = res.fileList.flatMap(({ files }) => files);
-      return fileList.find(file => file.name === filename)
-    }
-  );
+    });
+  })
+}
+
+async function fileIdIfExists() {
+  let currentPageToken = null
+  let result = []
+  do {
+    await doList(currentPageToken).then(({ searchedFile, pageToken }) => {
+      currentPageToken = pageToken
+      result = searchedFile
+    })
+  } while (!!currentPageToken || result.length === 0);
+  return result.length > 0 ? result[0].id : null
 }
 
 function create(fileMetadata, media) {
@@ -76,7 +91,7 @@ function update(fileId, fileMetadata, media) {
 /**
  * Uploads the file to Google Drive
  */
-function uploadToDrive() {
+async function uploadToDrive() {
   var fileMetadata = {
     name: getFileName(),
     parents: [folderId]
@@ -87,7 +102,7 @@ function uploadToDrive() {
   };
   if (overwrite === 'true') {
     actions.info('Checking if file exists...');
-    const existingFileId = fileIdIfExists()
+    const existingFileId = await fileIdIfExists()
     if (existingFileId) {
       actions.info(`File exists with ID: ${existingFileId}`);
       actions.info("Updating file..")
@@ -100,7 +115,6 @@ function uploadToDrive() {
     actions.info("Creating new file..")
     create(fileMetadata, media)
   }
-
 }
 
 main().catch(e => actions.setFailed(e));
