@@ -41,8 +41,6 @@ function doList(pageToken) {
       pageToken: pageToken
     }, function (err, res) {
       if (err) {
-        // Handle error
-        console.error(err);
         reject(err)
       } else {
         const searchedFile = res.data.files.find(file => file.parents[0] === folderId && file.name === `${filename}.pdf`);
@@ -60,6 +58,8 @@ async function fileIdIfExists() {
     await doList(currentPageToken).then(({ searchedFile, pageToken }) => {
       currentPageToken = pageToken
       result = searchedFile
+    }).catch(err => {
+      console.error(`Failure occurred while searching for file: ${err}`);
     })
   } while (!!currentPageToken || result.length === 0);
   return result.length > 0 ? result[0].id : null
