@@ -79,7 +79,8 @@ function update(fileId, fileMetadata, media) {
   drive.files.update({
     fileId: fileId,
     requestBody: fileMetadata,
-    media: media
+    media: media,
+    addParents: [folderId]
   }).then(() => actions.info('File uploaded successfully'))
     .catch(e => {
       actions.error('Upload failed');
@@ -91,8 +92,11 @@ function update(fileId, fileMetadata, media) {
  * Uploads the file to Google Drive
  */
 async function uploadToDrive() {
-  var fileMetadata = {
+  const fileMetadata = {
     name: getFileName(),
+  };
+  const createFileMetadata = {
+    ...{ fileMetadata },
     parents: [folderId]
   };
   var media = {
@@ -108,11 +112,11 @@ async function uploadToDrive() {
       update(existingFileId, fileMetadata, media)
     } else {
       actions.info("Creating new file..")
-      create(fileMetadata, media)
+      create(createFileMetadata, media)
     }
   } else {
     actions.info("Creating new file..")
-    create(fileMetadata, media)
+    create(createFileMetadata, media)
   }
 }
 

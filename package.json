@@ -1,10 +1,10 @@
 {
-  "name": "upload-to-drive",
+  "name": "upload-pdf-to-drive",
   "version": "1.0.0",
-  "description": "Github action to upload files or folders to Google Drive",
+  "description": "Github action to upload PDF files or folders to Google Drive",
   "repository": {
     "type": "git",
-    "url": "https://github.com/baymac/upload-to-drive"
+    "url": "https://github.com/baymac/upload-pdf-to-drive"
   },
   "main": "index.js",
   "scripts": {
