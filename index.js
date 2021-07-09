@@ -21,10 +21,8 @@ const scopes = ['https://www.googleapis.com/auth/drive'];
 const auth = new google.auth.JWT(credentialsJSON.client_email, null, credentialsJSON.private_key, scopes);
 const drive = google.drive({ version: 'v3', auth });
 
-const driveLink = `https://drive.google.com/drive/folders/${folderId}`
 
 async function main() {
-  actions.setOutput(link, driveLink);
   uploadToDrive();
 }
 
@@ -36,7 +34,7 @@ function doList(pageToken) {
   return new Promise((resolve, reject) => {
     drive.files.list({
       q: "mimeType='application/pdf'",
-      fields: 'nextPageToken, files(id,name,parents)',
+      fields: 'nextPageToken, files(id,name,parents,webViewLink)',
       spaces: 'drive',
       pageToken: pageToken
     }, function (err, res) {
@@ -44,8 +42,8 @@ function doList(pageToken) {
         reject(err)
       } else {
         const searchedFile = res.data.files.find(file => file.parents[0] === folderId && file.name === `${filename}.pdf`);
-        pageToken = res.nextPageToken;
-        resolve({ searchedFile, pageToken });
+        const nextPageToken = res.nextPageToken;
+        resolve({ searchedFile, nextPageToken });
       }
     });
   })
@@ -53,16 +51,17 @@ function doList(pageToken) {
 
 async function fileIdIfExists() {
   let currentPageToken = null
-  let result = []
+  let result = undefined
   do {
-    await doList(currentPageToken).then(({ searchedFile, pageToken }) => {
-      currentPageToken = pageToken
+    await doList(currentPageToken).then(({ searchedFile, nextPageToken }) => {
+      currentPageToken = nextPageToken
       result = searchedFile
     }).catch(err => {
       console.error(`Failure occurred while searching for file: ${err}`);
     })
-  } while (!!currentPageToken || result.length === 0);
-  return result.length > 0 ? result[0].id : null
+  } while (!!currentPageToken && !result);
+  actions.setOutput(link, result.webViewLink);
+  return result ? result.id : null
 }
 
 function create(fileMetadata, media) {
