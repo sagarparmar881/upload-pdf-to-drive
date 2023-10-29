@@ -10,8 +10,7 @@ const folderId = actions.getInput('folderId', { required: true });
 /** Local path to the file/folder to upload */
 const target = actions.getInput('target', { required: true });
 /** Optional name for the pdf file */
-// const filename = actions.getInput('filename', { required: false });
-const filename = 'Untitled.pdf'
+const filename = actions.getInput('filename', { required: false });
 /** Optional should overwrite or not */
 const overwrite = actions.getInput('overwrite', { required: false });
 /** Link to the Drive folder */
@@ -28,7 +27,7 @@ async function main() {
 }
 
 function getFileName() {
-  return 'Untitled.pdf'
+  return filename.length > 0 ? `${filename}.pdf` : 'upload.pdf'
 }
 
 function doList(pageToken) {
